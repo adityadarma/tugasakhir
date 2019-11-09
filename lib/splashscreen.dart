@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:iot/login.dart';
@@ -11,6 +12,13 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
+    super.initState();
+    startSplashScreen();
+  }
+
+  startSplashScreen() async {
+    var duration = const Duration(seconds: 3);
+    return Timer(duration, () async {
       FirebaseAuth.instance
         .currentUser()
         .then((currentUser) => {
@@ -32,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 }
             })
         .catchError((err) => print(err));
-    super.initState();
+    });
   }
 
   @override
