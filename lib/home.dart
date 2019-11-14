@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+// import 'package:flutter/rendering.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:iot/control.dart';
 import 'package:iot/login.dart';
+import 'package:iot/created.dart';
 
 class DrawerItem {
   String title;
@@ -82,14 +84,26 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.red,
+        title: Text('MeMoRi'),
+        actions: <Widget>[
+          PopupMenuButton(
+            onSelected: choiceAction,
+            itemBuilder: (BuildContext context){
+              return Constants.choices.map((String choice){
+                return PopupMenuItem<String>(
+                  value: choice,
+                  child: Text(choice),
+                );
+              }).toList();
+            },
+          )
+        ],
       ),
       body: _getDrawerItemWidget(_selectedDrawerIndex),
       drawer: Drawer(
         child: ListView(
-          // Important: Remove any padding from the ListView.
           padding: EdgeInsets.zero,
           children: <Widget>[
-            // header
             UserAccountsDrawerHeader(
               accountName: Text(name),
               accountEmail: Text(email),
@@ -99,19 +113,31 @@ class _HomeState extends State<Home> {
                   ),
               decoration: BoxDecoration(color: Colors.red[400]),
             ),
- 
-            // menu
             new Column(children: drawerOptions),
-            ListTile(
-              leading: Icon(Icons.exit_to_app),
-              title: Text('Log Out'),
-              onTap: () {
-                doLogout();
-              },
-            ),
           ],
         ),
       ),
     );
   }
+  void choiceAction(String choice){
+    if(choice == Constants.Pembuat){
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (_) {
+          return Created();
+        }),
+      );
+    }else if(choice == Constants.SignOut){
+      doLogout();
+    }
+  }
+}
+
+class Constants{
+  static const String Pembuat = 'Pembuat';
+  static const String SignOut = 'Sign out';
+
+  static const List<String> choices = <String>[
+    Pembuat,
+    SignOut
+  ];
 }
