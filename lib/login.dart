@@ -26,11 +26,6 @@ class _LoginState extends State<Login> {
       FirebaseUser user = result.user;
 
       if(user != null){
-        final prefs = await SharedPreferences.getInstance();
-
-        prefs.setString('name', 'Aditya Darma');
-        prefs.setString('email', 'adhit.boys1@gmail.com');
-        prefs.setString('photo', 'https://res.cloudinary.com/adityadarma/image/upload/v1567951892/user.jpg');
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Home()));
       }       
     }catch(e){
@@ -58,7 +53,7 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.red,
       body: Center(
         child: new Form(
           key: _formKey,
@@ -89,6 +84,7 @@ class _LoginState extends State<Login> {
                 keyboardType: TextInputType.emailAddress,
                 autofocus: false,
                 decoration: InputDecoration(
+                  fillColor: Colors.white,
                   filled: true,
                   hintText: 'Email',
                   contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
@@ -110,6 +106,7 @@ class _LoginState extends State<Login> {
                 autofocus: false,
                 obscureText: true,
                 decoration: InputDecoration(
+                  fillColor: Colors.white,
                   filled: true,
                   hintText: 'Password',
                   contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
@@ -124,7 +121,9 @@ class _LoginState extends State<Login> {
                 padding: EdgeInsets.symmetric(vertical: 10.0),
                 child: isLoading
                     ? Center(
-                        child: CircularProgressIndicator(),
+                        child: CircularProgressIndicator(
+                          backgroundColor: Colors.blue,
+                        ),
                       )
                     : RaisedButton(
                         textColor: Colors.white,

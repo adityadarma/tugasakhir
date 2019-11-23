@@ -9,11 +9,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'MeMoRi',
+      title: 'MEMORI',
       debugShowCheckedModeBanner: false,
-      // theme: ThemeData(
-      //   primarySwatch: Colors.lightBlue,
-      // ),
+      theme: ThemeData(canvasColor: Colors.white, primarySwatch: Colors.red),
       home: Splashscreen(),
     );
   }

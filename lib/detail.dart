@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+class Detail extends StatefulWidget {
+  @override
+  _DetailState createState() => _DetailState();
+}
 
-class Created extends StatelessWidget {
+class _DetailState extends State<Detail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Pembuat"),
+        title: Text('Detail'),
         backgroundColor: Colors.red,
       ),
-      body: Card(),
     );
   }
 }
