@@ -40,7 +40,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.red,
-        leading: Icon(Icons.home),
+        leading: Icon(Icons.home, size: 30.0,),
         title: Text('MEMORI'),
         actions: <Widget>[
           PopupMenuButton(
