@@ -1,13 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:iot/detail.dart';
 
 class CustomCard extends StatelessWidget {
-  CustomCard({@required this.id, this.name, this.value});
+  CustomCard({@required this.id, this.name, this.value, this.arus});
   final db = Firestore.instance;
   final id;
   final name;
   final value;
+  final arus;
+  final formatter = new NumberFormat("#.###");
 
   updateData(String name, bool value) async {
     db.collection('control').document(name).updateData({'value': value});
@@ -37,17 +40,11 @@ class CustomCard extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                   fontSize: 20.0),
             ),
-            // subtitle: Row(
-            //   children: <Widget>[
-            //     Switch(
-            //       activeColor: Colors.blue,
-            //       value: value,
-            //       onChanged: (newValue) {
-            //         updateData(id, newValue);
-            //       },
-            //     ),
-            //   ],
-            // ),
+            subtitle: Row(
+              children: <Widget>[
+                Text(formatter.format(arus) + ' Ampere', style: TextStyle(fontSize: 18.0),),
+              ],
+            ),
             trailing: new IconButton(
               icon: new Icon(Icons.keyboard_arrow_right, color: Colors.black, size: 40.0),
               onPressed: () {

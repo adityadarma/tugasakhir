@@ -76,6 +76,7 @@ class _HomeState extends State<Home> {
                             id : document['id'],
                             name : document['name'],
                             value : document['value'],
+                            arus: document['arus'],
                           );
                       }).toList(),
                     );
