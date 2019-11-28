@@ -48,7 +48,7 @@ class CustomCard extends StatelessWidget {
             trailing: new IconButton(
               icon: new Icon(Icons.keyboard_arrow_right, color: Colors.black, size: 40.0),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Detail()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => Detail(relayId : id,)));
               },
             ),
           )),
