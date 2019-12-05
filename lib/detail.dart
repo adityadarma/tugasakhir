@@ -34,8 +34,8 @@ class _DetailState extends State<Detail> with SingleTickerProviderStateMixin {
         bottom: new TabBar(
           controller: controller,
           tabs: <Widget>[
-            new Tab(icon: new Icon(Icons.access_time), text: "Harian",),
-            new Tab(icon: new Icon(Icons.access_time), text: "Bulanan",)
+            new Tab(text: "Harian",),
+            new Tab(text: "Bulanan",)
           ],
         ),
       ),

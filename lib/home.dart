@@ -73,7 +73,7 @@ class _HomeState extends State<Home> {
                       children: snapshot.data.documents
                         .map((DocumentSnapshot document) {
                           return new CustomCard(
-                            id : document['id'],
+                            id : document.documentID,
                             name : document['name'],
                             value : document['value'],
                             arus: document['arus'],
