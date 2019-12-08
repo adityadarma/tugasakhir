@@ -8,7 +8,7 @@ class Creator extends StatelessWidget {
         // child: Card(
           child: Column(
               children: <Widget>[
-                SizedBox(height: 30.0),
+                SizedBox(height: 20.0),
 
                 // Photo Profil
                 Image(image: AssetImage('assets/creator.jpg'),),
@@ -59,6 +59,7 @@ class Creator extends StatelessWidget {
                   'I Gusti Made Ngurah Desnanjaya,S.T.,M.T',
                   style: TextStyle(fontSize: 16, fontFamily: "Serif", height: 1.0,),
                 ),
+                SizedBox(height: 10.0),
             ]
           ),
         // )
