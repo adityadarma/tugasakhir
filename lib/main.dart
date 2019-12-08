@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:iot/login.dart';
-import 'package:iot/home.dart';
+import 'package:iot/page.dart';
 
 void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
@@ -47,7 +47,7 @@ class _SplashscreenState extends State<Splashscreen> {
                 {
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (_) {
-                      return Home();
+                      return Page();
                     }),
                   )
                 }

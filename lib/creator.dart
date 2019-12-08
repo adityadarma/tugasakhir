@@ -3,13 +3,9 @@ import 'package:flutter/material.dart';
 class Creator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Pembuat"),
-        backgroundColor: Colors.red,
-      ),
-      body: Center(
-        child: Card(
+    return SingleChildScrollView(
+      child: Center(
+        // child: Card(
           child: Column(
               children: <Widget>[
                 SizedBox(height: 30.0),
@@ -20,7 +16,7 @@ class Creator extends StatelessWidget {
 
                 // Judul Tugas Akhir
                 Text(
-                  'JUDUL TUGAS AKHIR:',
+                  'JUDUL TUGAS AKHIR',
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 22, fontFamily: "Serif", height: 1.0,),
                 ),
@@ -65,8 +61,8 @@ class Creator extends StatelessWidget {
                 ),
             ]
           ),
-        )
-      )
+        // )
+      ),
     );
   }
 }
