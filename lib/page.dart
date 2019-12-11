@@ -2,9 +2,11 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:iot/control.dart';
 import 'package:iot/creator.dart';
 import 'package:iot/home.dart';
 import 'package:iot/login.dart';
+import 'package:iot/monitor.dart';
 
 class Page extends StatefulWidget {
   @override
@@ -53,13 +55,9 @@ class _PageState extends State<Page> {
         },
         controller: pageController,
         children: <Widget>[
-          Center(
-            child: Text('Beranda'),
-          ),
           Home(),
-          Center(
-            child: Text('Message'),
-          ),
+          Control(),
+          Monitor(),
           Creator(),
         ],
       ),

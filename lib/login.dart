@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:iot/home.dart';
-// import 'package:fluttertoast/fluttertoast.dart';
+import 'package:iot/page.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -14,19 +14,17 @@ class _LoginState extends State<Login> {
   final email = TextEditingController();
   final password = TextEditingController();
   bool isLoading = false;
+  bool failed = true; 
 
   Future<void> doLogin() async {
-    setState(() {
-      isLoading = true;
-    });
-
     try{
+      setState(() {
+        isLoading = true;
+      });
+
       AuthResult result = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email.text, password: password.text);
       FirebaseUser user = result.user;
-
-      if(user != null){
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Home()));
-      }       
+      print(user.uid);
     }catch(e){
       setState(() {
         isLoading = false;
@@ -34,19 +32,38 @@ class _LoginState extends State<Login> {
       print(e.message);
     }
 
-    // Fluttertoast.showToast(
-    //   msg: "Email or Password is wrong!!",
-    //   toastLength: Toast.LENGTH_SHORT,
-    //   gravity: ToastGravity.BOTTOM,
-    //   timeInSecForIos: 3,
-    //   backgroundColor: Colors.grey[400],
-    //   textColor: Colors.white,
-    //   fontSize: 16.0
-    // );
+    FirebaseAuth.instance
+    .currentUser()
+    .then((currentUser) => {
+      if (currentUser == null)
+        {
+          setState(() {
+            isLoading = false;
+            failed = true;
+          })
+        }
+      else
+        {
+          setState(() {
+            isLoading = false;
+            failed = false;
+          })
+        }
+    });
 
-    setState(() {
-      isLoading = false;
-    }); 
+    if(failed){
+      Fluttertoast.showToast(
+        msg: "Email or Password is wrong!!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIos: 3,
+        backgroundColor: Colors.grey[400],
+        textColor: Colors.white,
+        fontSize: 16.0
+      );
+    }else{
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Page()));
+    }
   }
 
   @override

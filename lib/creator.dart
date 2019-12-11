@@ -11,7 +11,7 @@ class Creator extends StatelessWidget {
                 SizedBox(height: 20.0),
 
                 // Photo Profil
-                Image(image: AssetImage('assets/creator.jpg'),),
+                Image(image: AssetImage('assets/logo.png'),),
                 SizedBox(height: 20.0),
 
                 // Judul Tugas Akhir
@@ -26,7 +26,7 @@ class Creator extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 18, fontFamily: "Serif", height: 1.0,),
                 ),
-                SizedBox(height: 10.0),
+                SizedBox(height: 30.0),
 
                 // Nama Pembuat
                 Text(
