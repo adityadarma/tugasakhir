@@ -1,7 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:iot/page.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -22,47 +24,49 @@ class _LoginState extends State<Login> {
         isLoading = true;
       });
 
-      AuthResult result = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email.text, password: password.text);
-      FirebaseUser user = result.user;
-      print(user.uid);
+      final prefs = await SharedPreferences.getInstance();
+      await http.post(
+      Uri.encodeFull('http://192.168.1.9:8083/api/login'),
+      body: {'email': email.text, 'password': password.text},
+      headers: {"Accept": "application/json"})
+      .then((response) async {
+        var data = json.decode(response.body);
+        print(data);
+        if(response.statusCode == 200){
+          setState(() {
+            prefs.setBool('login', true);
+            prefs.setString('token', data['data']['token']);
+            Fluttertoast.showToast(
+              msg: "Authentication Success!",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIos: 3,
+              backgroundColor: Colors.grey[400],
+              textColor: Colors.white,
+              fontSize: 16.0
+            );
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Page()));
+          });
+        }else if(response.statusCode == 401){
+          Fluttertoast.showToast(
+            msg: data['message'],
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIos: 3,
+            backgroundColor: Colors.red[400],
+            textColor: Colors.white,
+            fontSize: 16.0
+          );
+        }
+        setState(() {
+          isLoading = false;
+        }); 
+      });
     }catch(e){
       setState(() {
         isLoading = false;
       }); 
       print(e.message);
-    }
-
-    FirebaseAuth.instance
-    .currentUser()
-    .then((currentUser) => {
-      if (currentUser == null)
-        {
-          setState(() {
-            isLoading = false;
-            failed = true;
-          })
-        }
-      else
-        {
-          setState(() {
-            isLoading = false;
-            failed = false;
-          })
-        }
-    });
-
-    if(failed){
-      Fluttertoast.showToast(
-        msg: "Email or Password is wrong!!",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIos: 3,
-        backgroundColor: Colors.grey[400],
-        textColor: Colors.white,
-        fontSize: 16.0
-      );
-    }else{
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Page()));
     }
   }
 

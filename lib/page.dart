@@ -1,12 +1,13 @@
 import 'dart:async';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:iot/control.dart';
-import 'package:iot/creator.dart';
-import 'package:iot/home.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+// import 'package:iot/control.dart';
+// import 'package:iot/creator.dart';
+// import 'package:iot/home.dart';
 import 'package:iot/login.dart';
-import 'package:iot/monitor.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+// import 'package:iot/monitor.dart';
 
 class Page extends StatefulWidget {
   @override
@@ -14,17 +15,36 @@ class Page extends StatefulWidget {
 }
 
 class _PageState extends State<Page> {
-  final db = Firestore.instance;
+  // final db = Firestore.instance;
   PageController pageController = PageController(initialPage: 0);
   StreamController<int> indexcontroller = StreamController<int>.broadcast();
   int index = 0;
 
   void doLogout() async {
-    FirebaseAuth.instance.signOut()
-    .then((e){
-      Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => Login()));
-    });
+    final prefs = await SharedPreferences.getInstance();
+    var token = "Bearer " + prefs.getString('token');
+
+    await http.get(
+        Uri.encodeFull('http://192.168.1.9:8083/api/logout'),
+        headers: {
+          "Accept": "application/json",
+          "Authorization": token
+        }).then((response) async {
+          Fluttertoast.showToast(
+            msg: "Logout Success!",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIos: 3,
+            backgroundColor: Colors.grey[400],
+            textColor: Colors.white,
+            fontSize: 16.0
+          );
+          setState(() {
+            prefs.setBool('login', false);
+            prefs.setString('token', '');
+          });
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login()));
+        });
   }
 
   @override
@@ -55,10 +75,10 @@ class _PageState extends State<Page> {
         },
         controller: pageController,
         children: <Widget>[
-          Home(),
-          Control(),
-          Monitor(),
-          Creator(),
+          // Home(),
+          // Control(),
+          // Monitor(),
+          // Creator(),
         ],
       ),
       bottomNavigationBar: StreamBuilder<Object>(
