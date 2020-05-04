@@ -1,0 +1,100 @@
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:iot/detail.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class Use extends StatefulWidget {
+  @override
+  _UseState createState() => _UseState();
+}
+
+class _UseState extends State<Use> {
+  List data;
+
+  Future<String> getData() async {
+    final prefs = await SharedPreferences.getInstance();
+    var token = "Bearer " + prefs.getString('token');
+    var res = await http.get(Uri.encodeFull('http://192.168.1.6:8082/penggunaan/tanggal'), headers: { 'accept':'application/json', 'Authorization':token});
+    
+    setState(() {
+      data = json.decode(res.body);
+    });
+    return 'success!';
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    this.getData();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: ListView.builder(
+        itemCount: data == null ? 0:data.length,
+        itemBuilder: (BuildContext context, int index) { 
+          return Container(
+            child: Card(
+              child: Column(
+                mainAxisSize: MainAxisSize.min, children: <Widget>[
+                ListTile(
+                  // leading: Text(data[index]['tanggal'], style: TextStyle(fontSize: 30.0),),
+                  title: Text(data[index]['tanggal'], style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),),
+                  // trailing: Image.asset(data[index]['type'] == 'mekah' ? 'mekah.jpg':'madinah.png', width: 32.0, height: 32.0,),
+                  subtitle: Column(children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Text('Voltase : ', style: TextStyle(fontWeight: FontWeight.bold),),
+                        Text(data[index]['voltase'].toString() + " Volt"),
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Text('Arus : ', style: TextStyle(fontWeight: FontWeight.bold),),
+                        Text(data[index]['arus'].toString() + " Ampere")
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Text('Daya : ', style: TextStyle(fontWeight: FontWeight.bold),),
+                        Text(data[index]['daya'].toString() + " Watt")
+                      ],
+                    ),
+                  ],),
+                  onTap: (){
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) {
+                        return Detail();
+                      }),
+                    );
+                  },
+                ),
+                //TERAKHIR, MEMBUAT BUTTON
+                // ButtonTheme.bar(
+                //   child: ButtonBar(
+                //     children: <Widget>[
+                //       // BUTTON PERTAMA 
+                //       FlatButton(
+                //         //DENGAN TEXT LIHAT DETAIL
+                //         child: const Text('LIHAT DETAIL'),
+                //         onPressed: () { /* ... */ },
+                //       ),
+                //       //BUTTON KEDUA
+                //       FlatButton(
+                //         //DENGAN TEXT DENGARKAN
+                //         child: const Text('DENGARKAN'),
+                //         onPressed: () { /* ... */ },
+                //       ),
+                //     ],
+                //   ),
+                // ),
+              ],),
+            )
+          );
+        },
+      ),
+    ); 
+  }  
+}

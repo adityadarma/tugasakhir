@@ -1,12 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-// import 'package:iot/control.dart';
+import 'package:iot/use.dart';
 // import 'package:iot/creator.dart';
-// import 'package:iot/home.dart';
+import 'package:iot/home.dart';
 import 'package:iot/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 // import 'package:iot/monitor.dart';
 
 class Page extends StatefulWidget {
@@ -15,36 +14,26 @@ class Page extends StatefulWidget {
 }
 
 class _PageState extends State<Page> {
-  // final db = Firestore.instance;
   PageController pageController = PageController(initialPage: 0);
   StreamController<int> indexcontroller = StreamController<int>.broadcast();
   int index = 0;
 
   void doLogout() async {
     final prefs = await SharedPreferences.getInstance();
-    var token = "Bearer " + prefs.getString('token');
-
-    await http.get(
-        Uri.encodeFull('http://192.168.1.9:8083/api/logout'),
-        headers: {
-          "Accept": "application/json",
-          "Authorization": token
-        }).then((response) async {
-          Fluttertoast.showToast(
-            msg: "Logout Success!",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIos: 3,
-            backgroundColor: Colors.grey[400],
-            textColor: Colors.white,
-            fontSize: 16.0
-          );
-          setState(() {
-            prefs.setBool('login', false);
-            prefs.setString('token', '');
-          });
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login()));
-        });
+    Fluttertoast.showToast(
+      msg: "Logout Success!",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIos: 3,
+      backgroundColor: Colors.grey[400],
+      textColor: Colors.white,
+      fontSize: 16.0
+    );
+    setState(() {
+      prefs.setBool('login', false);
+      prefs.setString('token', '');
+    });
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login()));
   }
 
   @override
@@ -58,7 +47,7 @@ class _PageState extends State<Page> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.red,
-        title: Text('MEMORI'),
+        title: Text('Smart Meter'),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.exit_to_app, size: 30.0,),
@@ -75,8 +64,8 @@ class _PageState extends State<Page> {
         },
         controller: pageController,
         children: <Widget>[
-          // Home(),
-          // Control(),
+          Home(),
+          Use(),
           // Monitor(),
           // Creator(),
         ],
@@ -91,8 +80,6 @@ class _PageState extends State<Page> {
               items: <FancyBottomNavigationItem>[
                 FancyBottomNavigationItem(
                     icon: Icon(Icons.home), title: Text('Beranda')),
-                FancyBottomNavigationItem(
-                    icon: Icon(Icons.settings_remote), title: Text('Kontrol')),
                 FancyBottomNavigationItem(
                     icon: Icon(Icons.assessment), title: Text('Pemakaian')),
                 FancyBottomNavigationItem(
