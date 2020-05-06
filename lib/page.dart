@@ -2,11 +2,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:iot/use.dart';
-// import 'package:iot/creator.dart';
+import 'package:iot/creator.dart';
 import 'package:iot/home.dart';
 import 'package:iot/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:iot/monitor.dart';
 
 class Page extends StatefulWidget {
   @override
@@ -47,7 +46,7 @@ class _PageState extends State<Page> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.red,
-        title: Text('Smart Meter'),
+        title: Text("Smart Meter"),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.exit_to_app, size: 30.0,),
@@ -66,8 +65,7 @@ class _PageState extends State<Page> {
         children: <Widget>[
           Home(),
           Use(),
-          // Monitor(),
-          // Creator(),
+          Creator(),
         ],
       ),
       bottomNavigationBar: StreamBuilder<Object>(

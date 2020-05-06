@@ -15,8 +15,10 @@ class _UseState extends State<Use> {
   Future<String> getData() async {
     final prefs = await SharedPreferences.getInstance();
     var token = "Bearer " + prefs.getString('token');
-    var res = await http.get(Uri.encodeFull('http://192.168.1.6:8082/penggunaan/tanggal'), headers: { 'accept':'application/json', 'Authorization':token});
-    
+    var res = await http.get(
+      Uri.encodeFull('http://192.168.1.6:8082/penggunaan'),
+      headers: { 'accept':'application/json', 'Authorization':token}
+    );
     setState(() {
       data = json.decode(res.body);
     });
@@ -40,56 +42,23 @@ class _UseState extends State<Use> {
               child: Column(
                 mainAxisSize: MainAxisSize.min, children: <Widget>[
                 ListTile(
-                  // leading: Text(data[index]['tanggal'], style: TextStyle(fontSize: 30.0),),
-                  title: Text(data[index]['tanggal'], style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),),
-                  // trailing: Image.asset(data[index]['type'] == 'mekah' ? 'mekah.jpg':'madinah.png', width: 32.0, height: 32.0,),
+                  title: Text('Bulan : ' + data[index]['bulan_tahun'], style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),),
                   subtitle: Column(children: <Widget>[
                     Row(
                       children: <Widget>[
-                        Text('Voltase : ', style: TextStyle(fontWeight: FontWeight.bold),),
-                        Text(data[index]['voltase'].toString() + " Volt"),
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Text('Arus : ', style: TextStyle(fontWeight: FontWeight.bold),),
-                        Text(data[index]['arus'].toString() + " Ampere")
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
                         Text('Daya : ', style: TextStyle(fontWeight: FontWeight.bold),),
-                        Text(data[index]['daya'].toString() + " Watt")
+                        Text(data[index]['daya'].toString() + " Watt"),
                       ],
                     ),
                   ],),
                   onTap: (){
                     Navigator.of(context).push(
                       MaterialPageRoute(builder: (_) {
-                        return Detail();
+                        return Detail(bulan: data[index]['bulan'], tahun: data[index]['tahun']);
                       }),
                     );
                   },
                 ),
-                //TERAKHIR, MEMBUAT BUTTON
-                // ButtonTheme.bar(
-                //   child: ButtonBar(
-                //     children: <Widget>[
-                //       // BUTTON PERTAMA 
-                //       FlatButton(
-                //         //DENGAN TEXT LIHAT DETAIL
-                //         child: const Text('LIHAT DETAIL'),
-                //         onPressed: () { /* ... */ },
-                //       ),
-                //       //BUTTON KEDUA
-                //       FlatButton(
-                //         //DENGAN TEXT DENGARKAN
-                //         child: const Text('DENGARKAN'),
-                //         onPressed: () { /* ... */ },
-                //       ),
-                //     ],
-                //   ),
-                // ),
               ],),
             )
           );

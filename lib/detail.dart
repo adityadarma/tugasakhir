@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Detail extends StatefulWidget {
+  Detail({@required this.bulan, this.tahun});
+  final bulan;
+  final tahun;
+  
   @override
   _DetailState createState() => _DetailState();
 }
@@ -14,7 +18,9 @@ class _DetailState extends State<Detail> {
   Future<String> getData() async {
     final prefs = await SharedPreferences.getInstance();
     var token = "Bearer " + prefs.getString('token');
-    var res = await http.get(Uri.encodeFull('http://192.168.1.6:8082/penggunaan/tanggal'), headers: { 'accept':'application/json', 'Authorization':token});
+    var link = "http://192.168.1.6:8082/penggunaan/detail?bulan=" + widget.bulan + "&tahun=" + widget.tahun;
+
+    var res = await http.get(Uri.encodeFull(link), headers: { 'accept':'application/json', 'Authorization':token});
     
     setState(() {
       data = json.decode(res.body);
@@ -36,7 +42,7 @@ class _DetailState extends State<Detail> {
         backgroundColor: Colors.red,
       ),
       body: Container(
-        margin: EdgeInsets.all(10.0), //SET MARGIN DARI CONTAINER
+        margin: EdgeInsets.all(10.0),
         child: ListView.builder(
           itemCount: data == null ? 0:data.length,
           itemBuilder: (BuildContext context, int index) { 
@@ -51,30 +57,23 @@ class _DetailState extends State<Detail> {
                     subtitle: Column(children: <Widget>[
                       Row(
                         children: <Widget>[
-                          Text('Voltase : ', style: TextStyle(fontWeight: FontWeight.bold),),
-                          Text(data[index]['voltase'].toString() + " Volt"),
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Text('Arus : ', style: TextStyle(fontWeight: FontWeight.bold),),
-                          Text(data[index]['arus'].toString() + " Ampere")
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[
                           Text('Daya : ', style: TextStyle(fontWeight: FontWeight.bold),),
-                          Text(data[index]['daya'].toString() + " Watt")
+                          Text(data[index]['daya'].toString() + " Watt"),
                         ],
                       ),
+                      // Row(
+                      //   children: <Widget>[
+                      //     Text('Arus : ', style: TextStyle(fontWeight: FontWeight.bold),),
+                      //     Text(data[index]['arus'].toString() + " Ampere")
+                      //   ],
+                      // ),
+                      // Row(
+                      //   children: <Widget>[
+                      //     Text('Daya : ', style: TextStyle(fontWeight: FontWeight.bold),),
+                      //     Text(data[index]['daya'].toString() + " Watt")
+                      //   ],
+                      // ),
                     ],),
-                    onTap: (){
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) {
-                          return Detail();
-                        }),
-                      );
-                    },
                   ),
                 ],),
               )
