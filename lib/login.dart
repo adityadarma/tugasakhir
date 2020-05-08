@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:iot/page.dart';
+import 'package:iot/mainpage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -26,7 +26,7 @@ class _LoginState extends State<Login> {
 
       final prefs = await SharedPreferences.getInstance();
       await http.post(
-      Uri.encodeFull('http://192.168.1.6:8082/login'),
+      Uri.encodeFull('http://192.168.1.34:8082/login'),
       body: {'email': email.text, 'password': password.text},
       headers: {"Accept": "application/json"})
       .then((response) async {
@@ -45,7 +45,7 @@ class _LoginState extends State<Login> {
               textColor: Colors.white,
               fontSize: 16.0
             );
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Page()));
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainPage()));
           });
         }else if(response.statusCode == 401){
           Fluttertoast.showToast(

@@ -16,7 +16,7 @@ class _UseState extends State<Use> {
     final prefs = await SharedPreferences.getInstance();
     var token = "Bearer " + prefs.getString('token');
     var res = await http.get(
-      Uri.encodeFull('http://192.168.1.6:8082/penggunaan'),
+      Uri.encodeFull('http://192.168.1.34:8082/penggunaan'),
       headers: { 'accept':'application/json', 'Authorization':token}
     );
     setState(() {
@@ -46,7 +46,7 @@ class _UseState extends State<Use> {
                   subtitle: Column(children: <Widget>[
                     Row(
                       children: <Widget>[
-                        Text('Daya : ', style: TextStyle(fontWeight: FontWeight.bold),),
+                        Text('Pemakaian : ', style: TextStyle(fontWeight: FontWeight.bold),),
                         Text(data[index]['daya'].toString() + " Watt"),
                       ],
                     ),

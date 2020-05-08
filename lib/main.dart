@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:iot/login.dart';
-import 'package:iot/page.dart';
+import 'package:iot/mainpage.dart';
 
 void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
@@ -37,7 +37,7 @@ class _SplashscreenState extends State<Splashscreen> {
       if (loginStatus) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_) {
-            return Page();
+            return MainPage();
           }),
         );
       } else {

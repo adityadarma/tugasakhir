@@ -7,12 +7,12 @@ import 'package:iot/home.dart';
 import 'package:iot/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Page extends StatefulWidget {
+class MainPage extends StatefulWidget {
   @override
-  _PageState createState() => _PageState();
+  _MainPageState createState() => _MainPageState();
 }
 
-class _PageState extends State<Page> {
+class _MainPageState extends State<MainPage> {
   PageController pageController = PageController(initialPage: 0);
   StreamController<int> indexcontroller = StreamController<int>.broadcast();
   int index = 0;
