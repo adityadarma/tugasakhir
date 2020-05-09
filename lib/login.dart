@@ -26,7 +26,7 @@ class _LoginState extends State<Login> {
 
       final prefs = await SharedPreferences.getInstance();
       await http.post(
-      Uri.encodeFull('http://192.168.1.34:8082/login'),
+      Uri.encodeFull('http://restapi-ta.kubusoftware.com/login'),
       body: {'email': email.text, 'password': password.text},
       headers: {"Accept": "application/json"})
       .then((response) async {

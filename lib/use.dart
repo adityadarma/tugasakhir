@@ -16,7 +16,7 @@ class _UseState extends State<Use> {
     final prefs = await SharedPreferences.getInstance();
     var token = "Bearer " + prefs.getString('token');
     var res = await http.get(
-      Uri.encodeFull('http://192.168.1.34:8082/penggunaan'),
+      Uri.encodeFull('http://restapi-ta.kubusoftware.com/penggunaan'),
       headers: { 'accept':'application/json', 'Authorization':token}
     );
     setState(() {
@@ -42,12 +42,12 @@ class _UseState extends State<Use> {
               child: Column(
                 mainAxisSize: MainAxisSize.min, children: <Widget>[
                 ListTile(
-                  title: Text('Bulan : ' + data[index]['bulan_tahun'], style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),),
+                  title: Text('Bulan : ' + data[index]['bulan_tahun'], style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold),),
                   subtitle: Column(children: <Widget>[
                     Row(
                       children: <Widget>[
                         Text('Pemakaian : ', style: TextStyle(fontWeight: FontWeight.bold),),
-                        Text(data[index]['daya'].toString() + " Watt"),
+                        Text(data[index]['daya'].toString() + " KWh"),
                       ],
                     ),
                   ],),

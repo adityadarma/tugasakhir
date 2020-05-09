@@ -37,40 +37,74 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    // print(getData());
-    // var series = [
-    //   charts.Series(
-    //     domainFn: (UsePerDate clickData, _) => clickData.tanggal,
-    //     measureFn: (UsePerDate clickData, _) => clickData.jumlah,
-    //     colorFn: (UsePerDate clickData, _) => clickData.warna,
-    //     id: 'Clicks',
-    //     data: chartList
-    //   ),
-    // ];
-
-    // var chartWidget = Padding(
-    //   padding: EdgeInsets.all(32.0),
-    //   child: SizedBox(
-    //     height: 200.0,
-    //     child: charts.BarChart(series,animate: true),
-    //   ),
-    // );
-
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          // chartWidget,
-        ],
-      ),
-    ); 
+    return CustomScrollView(
+      slivers: <Widget>[
+        SliverPadding(
+          padding: const EdgeInsets.all(16.0),
+          sliver: SliverGrid.count(
+            crossAxisSpacing: 16.0,
+            mainAxisSpacing: 16.0,
+            childAspectRatio: 1.5,
+            crossAxisCount: 3,
+            children: <Widget>[
+              Container(
+                padding: const EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  color: Colors.blue,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      "+500",
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0, color: Colors.white),
+                    ),
+                    const SizedBox(height: 5.0),
+                    Text("Leads".toUpperCase())
+                  ],
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  color: Colors.pink,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      "+300",
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0, color: Colors.white),
+                    ),
+                    const SizedBox(height: 5.0),
+                    Text("Customers".toUpperCase())
+                  ],
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  color: Colors.green,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      "+1200",
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0, color: Colors.white),
+                    ),
+                    const SizedBox(height: 5.0),
+                    Text("Orders".toUpperCase())
+                  ],
+                ),
+              ),
+            ],
+          ),
+        )
+      ],
+    );
   }  
-}
-
-class UsePerDate {
-  final String tanggal;
-  final int jumlah;
-  final Color warna;
-
-  UsePerDate(this.tanggal, this.jumlah, this.warna);
 }

@@ -18,7 +18,7 @@ class _DetailState extends State<Detail> {
   Future<String> getData() async {
     final prefs = await SharedPreferences.getInstance();
     var token = "Bearer " + prefs.getString('token');
-    var link = "http://192.168.1.34:8082/penggunaan/detail?bulan=" + widget.bulan + "&tahun=" + widget.tahun;
+    var link = "http://restapi-ta.kubusoftware.com/penggunaan/detail?bulan=" + widget.bulan + "&tahun=" + widget.tahun;
 
     var res = await http.get(Uri.encodeFull(link), headers: { 'accept':'application/json', 'Authorization':token});
     
@@ -52,13 +52,13 @@ class _DetailState extends State<Detail> {
                   mainAxisSize: MainAxisSize.min, children: <Widget>[
                   ListTile(
                     // leading: Text(data[index]['tanggal'], style: TextStyle(fontSize: 30.0),),
-                    title: Text(data[index]['tanggal'], style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),),
+                    title: Text(data[index]['tanggal'], style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold),),
                     // trailing: Image.asset(data[index]['type'] == 'mekah' ? 'mekah.jpg':'madinah.png', width: 32.0, height: 32.0,),
                     subtitle: Column(children: <Widget>[
                       Row(
                         children: <Widget>[
-                          Text('Daya : ', style: TextStyle(fontWeight: FontWeight.bold),),
-                          Text(data[index]['daya'].toString() + " Watt"),
+                          Text('Pemakaian : ', style: TextStyle(fontWeight: FontWeight.bold),),
+                          Text(data[index]['daya'].toString() + " KWh"),
                         ],
                       ),
                       // Row(
