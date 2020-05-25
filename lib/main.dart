@@ -5,11 +5,12 @@ import 'package:iot/login.dart';
 import 'package:iot/mainpage.dart';
 
 void main() => runApp(MyApp());
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'MEMORI',
+      title: 'Smart Meter',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(canvasColor: Colors.white, primarySwatch: Colors.red),
       home: Splashscreen(),

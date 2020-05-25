@@ -1,6 +1,6 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -10,29 +10,36 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  // List chartList = [];
+  String voltase;
+  String arus;
+  String daya;
 
-  // void getData() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   var token = "Bearer " + prefs.getString('token');
-  //   await http.get(Uri.encodeFull('http://192.168.1.6:8082/tanggal'), headers: { 'accept':'application/json', 'Authorization':token})
-  //   .then((response) async {
-  //     var data = json.decode(response.body);
-  //     // setState(() {
-  //       chartList = data.map((dynamic chartData) {
-  //         String tanggal = chartData['tanggal'];
-  //         int jumlah = chartData['jumlah'];
-  //         return new UsePerDate(tanggal, jumlah, Colors.red);
-  //       }).toList();
-  //     // });
-  //   });
-  //   print(chartList);
-  // }
+  void getDataTop() async {
+    final prefs = await SharedPreferences.getInstance();
+    var token = "Bearer " + prefs.getString('token');
+
+    await http.get(Uri.encodeFull('http://restapi-ta.kubusoftware.com/pantauan'), headers: { 'accept':'application/json', 'Authorization':token})
+    .then((response) async {
+      var data = json.decode(response.body);
+      setState(() {
+        voltase = data['voltase'].toString();
+        arus = data['arus'].toString();
+        daya = data['daya'].toString();
+      });
+    });
+  }
+
+  setInvalTop() {
+    Timer.periodic(Duration(milliseconds: 5000), (timer) {
+     getDataTop();
+    });
+  }
 
   @override
   void initState() {
     super.initState();
-    // getData();
+    setInvalTop();
+    getDataTop();
   }
 
   @override
@@ -56,12 +63,9 @@ class _HomeState extends State<Home> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text(
-                      "+500",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0, color: Colors.white),
-                    ),
+                    Text(voltase.toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0, color: Colors.white)),
                     const SizedBox(height: 5.0),
-                    Text("Leads".toUpperCase())
+                    Text("Volt".toUpperCase())
                   ],
                 ),
               ),
@@ -74,12 +78,9 @@ class _HomeState extends State<Home> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text(
-                      "+300",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0, color: Colors.white),
-                    ),
+                    Text(arus.toString(),style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0, color: Colors.white)),
                     const SizedBox(height: 5.0),
-                    Text("Customers".toUpperCase())
+                    Text("Ampere".toUpperCase())
                   ],
                 ),
               ),
@@ -92,18 +93,15 @@ class _HomeState extends State<Home> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text(
-                      "+1200",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0, color: Colors.white),
-                    ),
+                    Text(daya.toString(),style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0, color: Colors.white)),
                     const SizedBox(height: 5.0),
-                    Text("Orders".toUpperCase())
+                    Text("Watt".toUpperCase())
                   ],
                 ),
               ),
             ],
           ),
-        )
+        ),
       ],
     );
   }  
