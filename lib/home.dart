@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -10,9 +9,9 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  String voltase;
-  String arus;
-  String daya;
+  String tegangan = '0';
+  String arus = '0';
+  String daya = '0';
 
   void getDataTop() async {
     final prefs = await SharedPreferences.getInstance();
@@ -22,23 +21,23 @@ class _HomeState extends State<Home> {
     .then((response) async {
       var data = json.decode(response.body);
       setState(() {
-        voltase = data['voltase'].toString();
+        tegangan = data['tegangan'].toString();
         arus = data['arus'].toString();
         daya = data['daya'].toString();
       });
     });
   }
 
-  setInvalTop() {
-    Timer.periodic(Duration(milliseconds: 5000), (timer) {
-     getDataTop();
-    });
-  }
+  // setInvalTop() {
+  //   Timer.periodic(Duration(milliseconds: 3000), (timer) {
+  //    getDataTop();
+  //   });
+  // }
 
   @override
   void initState() {
     super.initState();
-    setInvalTop();
+    // setInvalTop();
     getDataTop();
   }
 
@@ -63,9 +62,9 @@ class _HomeState extends State<Home> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text(voltase.toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0, color: Colors.white)),
+                    Text(tegangan, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0, color: Colors.white)),
                     const SizedBox(height: 5.0),
-                    Text("Volt".toUpperCase())
+                    Text("Volt")
                   ],
                 ),
               ),
@@ -78,9 +77,9 @@ class _HomeState extends State<Home> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text(arus.toString(),style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0, color: Colors.white)),
+                    Text(arus,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0, color: Colors.white)),
                     const SizedBox(height: 5.0),
-                    Text("Ampere".toUpperCase())
+                    Text("Ampere")
                   ],
                 ),
               ),
@@ -93,9 +92,9 @@ class _HomeState extends State<Home> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text(daya.toString(),style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0, color: Colors.white)),
+                    Text(daya,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0, color: Colors.white)),
                     const SizedBox(height: 5.0),
-                    Text("Watt".toUpperCase())
+                    Text("Watt")
                   ],
                 ),
               ),

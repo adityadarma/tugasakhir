@@ -46,7 +46,7 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.red,
-        title: Text("Smart Meter"),
+        title: Text("Energi Meter"),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.exit_to_app, size: 30.0,),

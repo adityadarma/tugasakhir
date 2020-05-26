@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Smart Meter',
+      title: 'Energi Meter',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(canvasColor: Colors.white, primarySwatch: Colors.red),
       home: Splashscreen(),
