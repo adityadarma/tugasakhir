@@ -18,7 +18,7 @@ class _DetailState extends State<Detail> {
   Future<String> getData() async {
     final prefs = await SharedPreferences.getInstance();
     var token = "Bearer " + prefs.getString('token');
-    var link = "http://restapi-ta.kubusoftware.com/penggunaan/detail?bulan=" + widget.bulan + "&tahun=" + widget.tahun;
+    var link = "http://tugasakhir.kubusoftware.com/penggunaan/detail?bulan=" + widget.bulan + "&tahun=" + widget.tahun;
 
     var res = await http.get(Uri.encodeFull(link), headers: { 'accept':'application/json', 'Authorization':token});
     

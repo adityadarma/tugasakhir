@@ -26,16 +26,15 @@ class _LoginState extends State<Login> {
 
       final prefs = await SharedPreferences.getInstance();
       await http.post(
-      Uri.encodeFull('http://restapi-ta.kubusoftware.com/login'),
+      Uri.encodeFull('http://tugasakhir.kubusoftware.com/login'),
       body: {'email': email.text, 'password': password.text},
       headers: {"Accept": "application/json"})
       .then((response) async {
         var data = json.decode(response.body);
-        print(data);
         if(response.statusCode == 200){
           setState(() {
             prefs.setBool('login', true);
-            prefs.setString('token', data['data']['token']);
+            prefs.setString('token', data['api_token']);
             Fluttertoast.showToast(
               msg: "Authentication Success!",
               toastLength: Toast.LENGTH_SHORT,

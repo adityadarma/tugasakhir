@@ -17,7 +17,7 @@ class _HomeState extends State<Home> {
     final prefs = await SharedPreferences.getInstance();
     var token = "Bearer " + prefs.getString('token');
 
-    await http.get(Uri.encodeFull('http://restapi-ta.kubusoftware.com/pantauan'), headers: { 'accept':'application/json', 'Authorization':token})
+    await http.get(Uri.encodeFull('http://tugasakhir.kubusoftware.com/pantauan'), headers: { 'accept':'application/json', 'Authorization':token})
     .then((response) async {
       var data = json.decode(response.body);
       setState(() {
