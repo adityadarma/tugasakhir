@@ -13,7 +13,7 @@ class _HomeState extends State<Home> {
   String arus = '0';
   String daya = '0';
 
-  void getDataTop() async {
+  void getData() async {
     final prefs = await SharedPreferences.getInstance();
     var token = "Bearer " + prefs.getString('token');
 
@@ -28,17 +28,10 @@ class _HomeState extends State<Home> {
     });
   }
 
-  // setInvalTop() {
-  //   Timer.periodic(Duration(milliseconds: 3000), (timer) {
-  //    getDataTop();
-  //   });
-  // }
-
   @override
   void initState() {
     super.initState();
-    // setInvalTop();
-    getDataTop();
+    getData();
   }
 
   @override

@@ -16,7 +16,7 @@ class _UseState extends State<Use> {
     final prefs = await SharedPreferences.getInstance();
     var token = "Bearer " + prefs.getString('token');
     var res = await http.get(
-      Uri.encodeFull('http://restapi-ta.kubusoftware.com/penggunaan'),
+      Uri.encodeFull('http://tugasakhir.kubusoftware.com/penggunaan'),
       headers: { 'accept':'application/json', 'Authorization':token}
     );
     setState(() {
