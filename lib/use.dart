@@ -12,17 +12,20 @@ class Use extends StatefulWidget {
 class _UseState extends State<Use> {
   List data;
 
-  Future<String> getData() async {
+  void getData() async {
     final prefs = await SharedPreferences.getInstance();
     var token = "Bearer " + prefs.getString('token');
-    var res = await http.get(
-      Uri.encodeFull('http://tugasakhir.kubusoftware.com/penggunaan'),
-      headers: { 'accept':'application/json', 'Authorization':token}
-    );
-    setState(() {
-      data = json.decode(res.body);
-    });
-    return 'success!';
+    try {
+      var res = await http.get(
+        Uri.encodeFull('http://tugasakhir.kubusoftware.com/penggunaan'),
+        headers: { 'accept':'application/json', 'Authorization':token}
+      );
+      setState(() {
+        data = json.decode(res.body);
+      });
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   @override
