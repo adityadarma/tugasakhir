@@ -1,44 +1,46 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
+
 import 'package:flutter/material.dart';
-import 'package:iot/mainpage.dart';
+import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:iot/signup.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Login extends StatefulWidget {
+class User extends StatefulWidget {
   @override
-  _LoginState createState() => _LoginState();
+  _UserState createState() => _UserState();
 }
 
-class _LoginState extends State<Login> {
+class _UserState extends State<User> {
   final _formKey = new GlobalKey<FormState>();
 
-  final email = TextEditingController();
-  final password = TextEditingController();
+  var email = TextEditingController();
+  var password = TextEditingController();
   bool isLoading = false;
-  bool failed = true; 
 
-  Future<void> doLogin() async {
+  void getData() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      email = new TextEditingController(text: prefs.getString('email'));
+    });    
+  }
+
+  Future<void> save() async {
     try{
       setState(() {
         isLoading = true;
       });
 
       final prefs = await SharedPreferences.getInstance();
+      var token = "Bearer " + prefs.getString('token');
       await http.post(
-      Uri.encodeFull('http://tugasakhir.kubusoftware.com/login'),
+      Uri.encodeFull('http://tugasakhir.kubusoftware.com/change'),
       body: {'email': email.text, 'password': password.text},
-      headers: {"Accept": "application/json"})
+      headers: {"Accept": "application/json", 'Authorization':token})
       .then((response) async {
-        var data = json.decode(response.body);
         if(response.statusCode == 200){
           setState(() {
-            prefs.setBool('login', true);
-            prefs.setString('token', data['api_token']);
-            prefs.setString('email', data['email']);
             Fluttertoast.showToast(
-              msg: "Authentikasi Berhasil!",
+              msg: "Data diperbaharui!",
               toastLength: Toast.LENGTH_SHORT,
               gravity: ToastGravity.BOTTOM,
               timeInSecForIos: 3,
@@ -46,11 +48,10 @@ class _LoginState extends State<Login> {
               textColor: Colors.white,
               fontSize: 16.0
             );
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainPage()));
           });
         }else if(response.statusCode == 401){
           Fluttertoast.showToast(
-            msg: 'Authentikasi Gagal!',
+            msg: 'Perubahan Gagal!',
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.BOTTOM,
             timeInSecForIos: 3,
@@ -72,27 +73,22 @@ class _LoginState extends State<Login> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+  
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.red,
-      body: Center(
+    return SingleChildScrollView(
+      child: Center(
         child: new Form(
           key: _formKey,
           child: ListView(
             shrinkWrap: true,
             padding: EdgeInsets.only(left: 24.0, right: 24.0),
             children: <Widget>[
-              //logo
-              Hero(
-                tag: 'hero',
-                child: CircleAvatar(
-                  backgroundColor: Colors.transparent,
-                  radius: 48.0,
-                  child: Image.asset('assets/logo.png'),
-                ),
-              ),
               SizedBox(height: 48.0),
-
               //email
               TextFormField(
                 validator: (value) {
@@ -101,6 +97,7 @@ class _LoginState extends State<Login> {
                   }
                   return null;
                 },
+                // initialValue: emailData,
                 controller: email,
                 keyboardType: TextInputType.emailAddress,
                 autofocus: false,
@@ -150,42 +147,16 @@ class _LoginState extends State<Login> {
                         textColor: Colors.white,
                         color: Colors.blue,
                         child: Text(
-                          "Masuk",
+                          "Perbaharui",
                           style: TextStyle(fontSize: 15.0),
                         ),
                         onPressed: () {
-                          doLogin();
+                          save();
                         },
                         shape: new RoundedRectangleBorder(
                           borderRadius: new BorderRadius.circular(30.0),
                         ),
                       ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      'Belum punya akun?',
-                      style: TextStyle(fontFamily: 'Montserrat'),
-                    ),
-                    SizedBox(width: 5.0),
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => Signup()));
-                      },
-                      child: Text(
-                        'Daftar',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.bold,
-                            decoration: TextDecoration.underline),
-                      ),
-                    )
-                  ],
-                )
               ),
             ],
           ),

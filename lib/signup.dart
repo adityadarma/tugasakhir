@@ -1,25 +1,25 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:flutter/material.dart';
-import 'package:iot/mainpage.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:iot/signup.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class Login extends StatefulWidget {
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:iot/mainpage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+
+class Signup extends StatefulWidget {
   @override
-  _LoginState createState() => _LoginState();
+  _SignupState createState() => _SignupState();
 }
 
-class _LoginState extends State<Login> {
+class _SignupState extends State<Signup> {
   final _formKey = new GlobalKey<FormState>();
 
   final email = TextEditingController();
   final password = TextEditingController();
   bool isLoading = false;
-  bool failed = true; 
+  bool failed = true;
 
-  Future<void> doLogin() async {
+  Future<void> doSignup() async {
     try{
       setState(() {
         isLoading = true;
@@ -27,18 +27,17 @@ class _LoginState extends State<Login> {
 
       final prefs = await SharedPreferences.getInstance();
       await http.post(
-      Uri.encodeFull('http://tugasakhir.kubusoftware.com/login'),
+      Uri.encodeFull('http://tugasakhir.kubusoftware.com/register'),
       body: {'email': email.text, 'password': password.text},
       headers: {"Accept": "application/json"})
       .then((response) async {
         var data = json.decode(response.body);
-        if(response.statusCode == 200){
+        if(response.statusCode == 201){
           setState(() {
             prefs.setBool('login', true);
             prefs.setString('token', data['api_token']);
-            prefs.setString('email', data['email']);
             Fluttertoast.showToast(
-              msg: "Authentikasi Berhasil!",
+              msg: "Register Berhasil!",
               toastLength: Toast.LENGTH_SHORT,
               gravity: ToastGravity.BOTTOM,
               timeInSecForIos: 3,
@@ -50,7 +49,7 @@ class _LoginState extends State<Login> {
           });
         }else if(response.statusCode == 401){
           Fluttertoast.showToast(
-            msg: 'Authentikasi Gagal!',
+            msg: 'Register Gagal!',
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.BOTTOM,
             timeInSecForIos: 3,
@@ -150,42 +149,16 @@ class _LoginState extends State<Login> {
                         textColor: Colors.white,
                         color: Colors.blue,
                         child: Text(
-                          "Masuk",
+                          "Daftar",
                           style: TextStyle(fontSize: 15.0),
                         ),
                         onPressed: () {
-                          doLogin();
+                          doSignup();
                         },
                         shape: new RoundedRectangleBorder(
                           borderRadius: new BorderRadius.circular(30.0),
                         ),
                       ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      'Belum punya akun?',
-                      style: TextStyle(fontFamily: 'Montserrat'),
-                    ),
-                    SizedBox(width: 5.0),
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => Signup()));
-                      },
-                      child: Text(
-                        'Daftar',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.bold,
-                            decoration: TextDecoration.underline),
-                      ),
-                    )
-                  ],
-                )
               ),
             ],
           ),

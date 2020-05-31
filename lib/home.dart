@@ -1,7 +1,5 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-// import 'package:flutter_circular_chart/flutter_circular_chart.dart';
-// import 'package:flutter_sparkline/flutter_sparkline.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -95,15 +93,15 @@ class _HomeState extends State<Home> {
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: cardItems("Tegangan","220","Volt"),
+            child: cardItems("Tegangan",tegangan,"Volt"),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: cardItems("Arus","1.20","Ampere"),
+            child: cardItems("Arus",arus,"Ampere"),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: cardItems("Daya","280","Watt"),
+            child: cardItems("Daya",daya,"Watt"),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),

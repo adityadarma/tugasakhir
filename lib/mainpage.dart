@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:iot/use.dart';
-import 'package:iot/creator.dart';
+import 'package:iot/user.dart';
 import 'package:iot/home.dart';
 import 'package:iot/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -65,7 +65,7 @@ class _MainPageState extends State<MainPage> {
         children: <Widget>[
           Home(),
           Use(),
-          Creator(),
+          User(),
         ],
       ),
       bottomNavigationBar: StreamBuilder<Object>(
@@ -81,7 +81,7 @@ class _MainPageState extends State<MainPage> {
                 FancyBottomNavigationItem(
                     icon: Icon(Icons.assessment), title: Text('Pemakaian')),
                 FancyBottomNavigationItem(
-                    icon: Icon(Icons.person), title: Text('Pembuat')),
+                    icon: Icon(Icons.person), title: Text('Pengguna')),
               ],
               onItemSelected: (int value) {
                 indexcontroller.add(value);
