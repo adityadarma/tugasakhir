@@ -27,29 +27,39 @@ class _SignupState extends State<Signup> {
 
       final prefs = await SharedPreferences.getInstance();
       await http.post(
-      Uri.encodeFull('http://tugasakhir.kubusoftware.com/register'),
-      body: {'email': email.text, 'password': password.text},
-      headers: {"Accept": "application/json"})
-      .then((response) async {
+        Uri.encodeFull('http://restapi-ta.kubusoftware.com/register'),
+        body: {'email': email.text, 'password': password.text},
+        headers: {"Accept": "application/json"}
+      ).then((response) async {
         var data = json.decode(response.body);
         if(response.statusCode == 201){
-          setState(() {
-            prefs.setBool('login', true);
-            prefs.setString('token', data['api_token']);
-            Fluttertoast.showToast(
-              msg: "Register Berhasil!",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIos: 3,
-              backgroundColor: Colors.grey[400],
-              textColor: Colors.white,
-              fontSize: 16.0
-            );
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainPage()));
-          });
-        }else if(response.statusCode == 401){
+          prefs.setBool('login', true);
+          prefs.setString('token', data['token']);
+          prefs.setString('email', data['email']);
+          prefs.setString('biaya', data['biaya']);
           Fluttertoast.showToast(
-            msg: 'Register Gagal!',
+            msg: data['message'],
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIos: 3,
+            backgroundColor: Colors.grey[400],
+            textColor: Colors.white,
+            fontSize: 16.0
+          );
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainPage()));
+        }else if(response.statusCode == 422){
+          Fluttertoast.showToast(
+            msg: 'Data diperlukan',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIos: 3,
+            backgroundColor: Colors.red[400],
+            textColor: Colors.white,
+            fontSize: 16.0
+          );
+        }else{
+          Fluttertoast.showToast(
+            msg: data['message'],
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.BOTTOM,
             timeInSecForIos: 3,

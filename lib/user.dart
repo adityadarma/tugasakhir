@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
@@ -15,12 +14,16 @@ class _UserState extends State<User> {
 
   var email = TextEditingController();
   var password = TextEditingController();
+  var token = TextEditingController();
+  var biaya = TextEditingController();
   bool isLoading = false;
 
   void getData() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       email = new TextEditingController(text: prefs.getString('email'));
+      token = new TextEditingController(text: prefs.getString('token'));
+      biaya = new TextEditingController(text: prefs.getString('biaya'));
     });    
   }
 
@@ -33,25 +36,26 @@ class _UserState extends State<User> {
       final prefs = await SharedPreferences.getInstance();
       var token = "Bearer " + prefs.getString('token');
       await http.post(
-      Uri.encodeFull('http://tugasakhir.kubusoftware.com/change'),
-      body: {'email': email.text, 'password': password.text},
-      headers: {"Accept": "application/json", 'Authorization':token})
-      .then((response) async {
+        Uri.encodeFull('http://restapi-ta.kubusoftware.com/change'),
+        body: {'email': email.text, 'password': password.text, 'biaya': biaya.text},
+        headers: {"Accept": "application/json", 'Authorization':token}
+      ).then((response) async {
+        var data = json.decode(response.body);
         if(response.statusCode == 200){
-          setState(() {
-            Fluttertoast.showToast(
-              msg: "Data diperbaharui!",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIos: 3,
-              backgroundColor: Colors.grey[400],
-              textColor: Colors.white,
-              fontSize: 16.0
-            );
-          });
+          prefs.setString('email', email.text);
+          prefs.setString('biaya', biaya.text);
+          Fluttertoast.showToast(
+            msg: data['message'],
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIos: 3,
+            backgroundColor: Colors.grey[400],
+            textColor: Colors.white,
+            fontSize: 16.0
+          );
         }else if(response.statusCode == 401){
           Fluttertoast.showToast(
-            msg: 'Perubahan Gagal!',
+            msg: data['message'],
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.BOTTOM,
             timeInSecForIos: 3,
@@ -93,11 +97,10 @@ class _UserState extends State<User> {
               TextFormField(
                 validator: (value) {
                   if (value.isEmpty) {
-                    return 'Please Input Email';
+                    return 'Masukkan Email';
                   }
                   return null;
                 },
-                // initialValue: emailData,
                 controller: email,
                 keyboardType: TextInputType.emailAddress,
                 autofocus: false,
@@ -116,7 +119,7 @@ class _UserState extends State<User> {
               TextFormField(
                 validator: (value) {
                   if (value.isEmpty) {
-                    return 'Please Input Password';
+                    return 'Masukkan Password';
                   }
                   return null;
                 },
@@ -134,7 +137,43 @@ class _UserState extends State<User> {
               ),
               SizedBox(height: 4.0),
 
-              //loginButton
+              //token
+              TextFormField(
+                controller: token,
+                autofocus: false,
+                decoration: InputDecoration(
+                  fillColor: Colors.white,
+                  filled: true,
+                  hintText: 'Password',
+                  contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(32.0)),
+                ),
+              ),
+              SizedBox(height: 4.0),
+
+              //biaya
+              TextFormField(
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Masukkan Biaya';
+                  }
+                  return null;
+                },
+                controller: biaya,
+                autofocus: false,
+                decoration: InputDecoration(
+                  fillColor: Colors.white,
+                  filled: true,
+                  hintText: 'Password',
+                  contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(32.0)),
+                ),
+              ),
+              SizedBox(height: 4.0),
+
+              //saveButton
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 10.0),
                 child: isLoading

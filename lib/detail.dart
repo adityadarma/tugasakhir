@@ -15,17 +15,19 @@ class Detail extends StatefulWidget {
 class _DetailState extends State<Detail> {
   List data;
 
-  Future<String> getData() async {
+  void getData() async {
     final prefs = await SharedPreferences.getInstance();
     var token = "Bearer " + prefs.getString('token');
-    var link = "http://tugasakhir.kubusoftware.com/penggunaan/detail?bulan=" + widget.bulan + "&tahun=" + widget.tahun;
-
-    var res = await http.get(Uri.encodeFull(link), headers: { 'accept':'application/json', 'Authorization':token});
-    
-    setState(() {
-      data = json.decode(res.body);
-    });
-    return 'success!';
+    try {
+      var link = "http://restapi-ta.kubusoftware.com/penggunaan/detail?bulan=" + widget.bulan + "&tahun=" + widget.tahun;
+      var res = await http.get(Uri.encodeFull(link), headers: { 'accept':'application/json', 'Authorization':token});
+      
+      setState(() {
+        data = json.decode(res.body);
+      });
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   @override

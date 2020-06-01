@@ -27,30 +27,39 @@ class _LoginState extends State<Login> {
 
       final prefs = await SharedPreferences.getInstance();
       await http.post(
-      Uri.encodeFull('http://tugasakhir.kubusoftware.com/login'),
-      body: {'email': email.text, 'password': password.text},
-      headers: {"Accept": "application/json"})
-      .then((response) async {
+        Uri.encodeFull('http://restapi-ta.kubusoftware.com/login'),
+        body: {'email': email.text, 'password': password.text},
+        headers: {"Accept": "application/json"}
+      ).then((response) async {
         var data = json.decode(response.body);
         if(response.statusCode == 200){
-          setState(() {
-            prefs.setBool('login', true);
-            prefs.setString('token', data['api_token']);
-            prefs.setString('email', data['email']);
-            Fluttertoast.showToast(
-              msg: "Authentikasi Berhasil!",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIos: 3,
-              backgroundColor: Colors.grey[400],
-              textColor: Colors.white,
-              fontSize: 16.0
-            );
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainPage()));
-          });
-        }else if(response.statusCode == 401){
+          prefs.setBool('login', true);
+          prefs.setString('token', data['token']);
+          prefs.setString('email', data['email']);
+          prefs.setString('biaya', data['biaya']);
           Fluttertoast.showToast(
-            msg: 'Authentikasi Gagal!',
+            msg: data['message'],
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIos: 3,
+            backgroundColor: Colors.grey[400],
+            textColor: Colors.white,
+            fontSize: 16.0
+          );
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainPage()));
+        }else if(response.statusCode == 422){
+          Fluttertoast.showToast(
+            msg: 'Data diperlukan',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIos: 3,
+            backgroundColor: Colors.red[400],
+            textColor: Colors.white,
+            fontSize: 16.0
+          );
+        }else{
+          Fluttertoast.showToast(
+            msg: data['message'],
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.BOTTOM,
             timeInSecForIos: 3,
@@ -161,32 +170,32 @@ class _LoginState extends State<Login> {
                         ),
                       ),
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      'Belum punya akun?',
-                      style: TextStyle(fontFamily: 'Montserrat'),
-                    ),
-                    SizedBox(width: 5.0),
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => Signup()));
-                      },
-                      child: Text(
-                        'Daftar',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.bold,
-                            decoration: TextDecoration.underline),
-                      ),
-                    )
-                  ],
-                )
-              ),
+              // Padding(
+              //   padding: EdgeInsets.symmetric(vertical: 10.0),
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     children: <Widget>[
+              //       Text(
+              //         'Belum punya akun?',
+              //         style: TextStyle(fontFamily: 'Montserrat'),
+              //       ),
+              //       SizedBox(width: 5.0),
+              //       InkWell(
+              //         onTap: () {
+              //           Navigator.push(context, MaterialPageRoute(builder: (context) => Signup()));
+              //         },
+              //         child: Text(
+              //           'Daftar',
+              //           style: TextStyle(
+              //               color: Colors.white,
+              //               fontFamily: 'Montserrat',
+              //               fontWeight: FontWeight.bold,
+              //               decoration: TextDecoration.underline),
+              //         ),
+              //       )
+              //     ],
+              //   )
+              // ),
             ],
           ),
         ),

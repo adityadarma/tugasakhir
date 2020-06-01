@@ -17,7 +17,7 @@ class _UseState extends State<Use> {
     var token = "Bearer " + prefs.getString('token');
     try {
       var res = await http.get(
-        Uri.encodeFull('http://tugasakhir.kubusoftware.com/penggunaan'),
+        Uri.encodeFull('http://restapi-ta.kubusoftware.com/penggunaan'),
         headers: { 'accept':'application/json', 'Authorization':token}
       );
       setState(() {

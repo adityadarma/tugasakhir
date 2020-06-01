@@ -31,6 +31,7 @@ class _MainPageState extends State<MainPage> {
     setState(() {
       prefs.setBool('login', false);
       prefs.setString('token', '');
+      prefs.setString('email', '');
     });
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login()));
   }
