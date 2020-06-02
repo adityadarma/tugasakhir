@@ -36,7 +36,6 @@ class _SignupState extends State<Signup> {
           prefs.setBool('login', true);
           prefs.setString('token', data['token']);
           prefs.setString('email', data['email']);
-          prefs.setString('biaya', data['biaya']);
           Fluttertoast.showToast(
             msg: data['message'],
             toastLength: Toast.LENGTH_SHORT,

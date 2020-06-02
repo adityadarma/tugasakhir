@@ -15,7 +15,6 @@ class _UserState extends State<User> {
   var email = TextEditingController();
   var password = TextEditingController();
   var token = TextEditingController();
-  var biaya = TextEditingController();
   bool isLoading = false;
 
   void getData() async {
@@ -23,7 +22,6 @@ class _UserState extends State<User> {
     setState(() {
       email = new TextEditingController(text: prefs.getString('email'));
       token = new TextEditingController(text: prefs.getString('token'));
-      biaya = new TextEditingController(text: prefs.getString('biaya'));
     });    
   }
 
@@ -37,13 +35,12 @@ class _UserState extends State<User> {
       var token = "Bearer " + prefs.getString('token');
       await http.post(
         Uri.encodeFull('http://restapi-ta.kubusoftware.com/change'),
-        body: {'email': email.text, 'password': password.text, 'biaya': biaya.text},
+        body: {'email': email.text, 'password': password.text},
         headers: {"Accept": "application/json", 'Authorization':token}
       ).then((response) async {
         var data = json.decode(response.body);
         if(response.statusCode == 200){
           prefs.setString('email', email.text);
-          prefs.setString('biaya', biaya.text);
           Fluttertoast.showToast(
             msg: data['message'],
             toastLength: Toast.LENGTH_SHORT,
@@ -92,8 +89,9 @@ class _UserState extends State<User> {
             shrinkWrap: true,
             padding: EdgeInsets.only(left: 24.0, right: 24.0),
             children: <Widget>[
-              SizedBox(height: 48.0),
+              SizedBox(height: 20.0),
               //email
+              Text('Email', style: TextStyle(color: Colors.black87, fontSize: 15.0,fontWeight: FontWeight.bold),),
               TextFormField(
                 validator: (value) {
                   if (value.isEmpty) {
@@ -116,6 +114,7 @@ class _UserState extends State<User> {
               SizedBox(height: 8.0),
 
               //password
+              Text('Password', style: TextStyle(color: Colors.black87, fontSize: 15.0,fontWeight: FontWeight.bold),),
               TextFormField(
                 validator: (value) {
                   if (value.isEmpty) {
@@ -138,29 +137,9 @@ class _UserState extends State<User> {
               SizedBox(height: 4.0),
 
               //token
+              Text('Token', style: TextStyle(color: Colors.black87, fontSize: 15.0,fontWeight: FontWeight.bold),),
               TextFormField(
                 controller: token,
-                autofocus: false,
-                decoration: InputDecoration(
-                  fillColor: Colors.white,
-                  filled: true,
-                  hintText: 'Password',
-                  contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(32.0)),
-                ),
-              ),
-              SizedBox(height: 4.0),
-
-              //biaya
-              TextFormField(
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Masukkan Biaya';
-                  }
-                  return null;
-                },
-                controller: biaya,
                 autofocus: false,
                 decoration: InputDecoration(
                   fillColor: Colors.white,

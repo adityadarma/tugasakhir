@@ -70,26 +70,27 @@ class _MainPageState extends State<MainPage> {
         ],
       ),
       bottomNavigationBar: StreamBuilder<Object>(
-          initialData: 0,
-          stream: indexcontroller.stream,
-          builder: (context, snapshot) {
-            int cIndex = snapshot.data;
-            return FancyBottomNavigation(
-              currentIndex: cIndex,
-              items: <FancyBottomNavigationItem>[
-                FancyBottomNavigationItem(
-                    icon: Icon(Icons.home), title: Text('Beranda')),
-                FancyBottomNavigationItem(
-                    icon: Icon(Icons.assessment), title: Text('Pemakaian')),
-                FancyBottomNavigationItem(
-                    icon: Icon(Icons.person), title: Text('Pengguna')),
-              ],
-              onItemSelected: (int value) {
-                indexcontroller.add(value);
-                pageController.jumpToPage(value);
-              },
-            );
-          }),
+        initialData: 0,
+        stream: indexcontroller.stream,
+        builder: (context, snapshot) {
+          int cIndex = snapshot.data;
+          return FancyBottomNavigation(
+            currentIndex: cIndex,
+            items: <FancyBottomNavigationItem>[
+              FancyBottomNavigationItem(
+                  icon: Icon(Icons.home), title: Text('Beranda')),
+              FancyBottomNavigationItem(
+                  icon: Icon(Icons.assessment), title: Text('Pemakaian')),
+              FancyBottomNavigationItem(
+                  icon: Icon(Icons.person), title: Text('Pengguna')),
+            ],
+            onItemSelected: (int value) {
+              indexcontroller.add(value);
+              pageController.jumpToPage(value);
+            },
+          );
+        }
+      ),
     );
   }
 }
@@ -103,15 +104,15 @@ class FancyBottomNavigation extends StatefulWidget {
   final List<FancyBottomNavigationItem> items;
   final ValueChanged<int> onItemSelected;
 
-  FancyBottomNavigation(
-      {Key key,
-      this.currentIndex = 0,
-      this.iconSize = 24,
-      this.activeColor,
-      this.inactiveColor,
-      this.backgroundColor,
-      @required this.items,
-      @required this.onItemSelected}) {
+  FancyBottomNavigation({
+    Key key,
+    this.currentIndex = 0,
+    this.iconSize = 24,
+    this.activeColor,
+    this.inactiveColor,
+    this.backgroundColor,
+    @required this.items,
+    @required this.onItemSelected}) {
     assert(items != null);
     assert(onItemSelected != null);
   }
@@ -119,13 +120,14 @@ class FancyBottomNavigation extends StatefulWidget {
   @override
   _FancyBottomNavigationState createState() {
     return _FancyBottomNavigationState(
-        items: items,
-        backgroundColor: backgroundColor,
-        currentIndex: currentIndex,
-        iconSize: iconSize,
-        activeColor: activeColor,
-        inactiveColor: inactiveColor,
-        onItemSelected: onItemSelected);
+      items: items,
+      backgroundColor: backgroundColor,
+      currentIndex: currentIndex,
+      iconSize: iconSize,
+      activeColor: activeColor,
+      inactiveColor: inactiveColor,
+      onItemSelected: onItemSelected
+    );
   }
 }
 
@@ -139,13 +141,13 @@ class _FancyBottomNavigationState extends State<FancyBottomNavigation> {
   int _selectedIndex;
   ValueChanged<int> onItemSelected;
 
-  _FancyBottomNavigationState(
-      {@required this.items,
-      this.currentIndex,
-      this.activeColor,
-      this.inactiveColor = Colors.black,
-      this.backgroundColor,
-      this.iconSize,
+  _FancyBottomNavigationState({
+    @required this.items,
+    this.currentIndex,
+    this.activeColor,
+    this.inactiveColor = Colors.black,
+    this.backgroundColor,
+    this.iconSize,
       @required this.onItemSelected}) {
     _selectedIndex = currentIndex;
   }
@@ -208,8 +210,9 @@ class _FancyBottomNavigationState extends State<FancyBottomNavigation> {
       height: 56,
       padding: EdgeInsets.only(left: 8, right: 8, top: 6, bottom: 6),
       decoration: BoxDecoration(
-          color: backgroundColor,
-          boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 2)]),
+        color: backgroundColor,
+        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 2)]
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: items.map((item) {
