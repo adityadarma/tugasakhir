@@ -13,6 +13,7 @@ class _HomeState extends State<Home> {
   String tegangan = '0';
   String arus = '0';
   String daya = '0';
+  String pf = '0';
 
   void getData() async {
     final prefs = await SharedPreferences.getInstance();
@@ -25,6 +26,7 @@ class _HomeState extends State<Home> {
           tegangan = data['tegangan'].toString();
           arus = data['arus'].toString();
           daya = data['daya'].toString();
+          pf = data['pf'].toString();
         });
       });
     } catch (e) {
@@ -105,19 +107,14 @@ class _HomeState extends State<Home> {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: cardItems("Power Factor","0.20",""),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: cardItems("Power","0.020","Kwh"),
+            child: cardItems("Power Factor",pf,""),
           ),
         ],
         staggeredTiles: [
-          StaggeredTile.extent(2, 150.0),
-          StaggeredTile.extent(2, 150.0),
-          StaggeredTile.extent(2, 150.0),
-          StaggeredTile.extent(2, 150.0),
-          StaggeredTile.extent(4, 150.0),
+          StaggeredTile.extent(2, 200.0),
+          StaggeredTile.extent(2, 200.0),
+          StaggeredTile.extent(2, 200.0),
+          StaggeredTile.extent(2, 200.0),
         ],
       )
     );
