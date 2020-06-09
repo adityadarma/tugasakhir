@@ -50,13 +50,12 @@ class _DetailState extends State<Detail> {
                 );
               } else if (snapshot.connectionState == ConnectionState.done) {
                 var data = snapshot.data;
-                return Container(
-                  margin: const EdgeInsets.all(8.0),
-                  child: ListView.builder(
+                return ListView.builder(
                     itemCount: data == null ? 0:data.length,
                     itemBuilder: (BuildContext context, int index) { 
                       return Container(
                         child: Card(
+                          margin: const EdgeInsets.all(8.0),
                           child: Column(
                             mainAxisSize: MainAxisSize.min, children: <Widget>[
                             ListTile(
@@ -74,8 +73,7 @@ class _DetailState extends State<Detail> {
                         )
                       );
                     },
-                  ),
-                ); 
+                  ); 
               } else {
                 return Center(
                   child: CircularProgressIndicator(),
