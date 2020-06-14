@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "7786640763",
+    "firebase_url": "https://wattmeter-9f837.firebaseio.com",
+    "project_id": "wattmeter-9f837",
+    "storage_bucket": "wattmeter-9f837.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:7786640763:android:c97faa2ea1d92d8a77b9de",
+        "android_client_info": {
+          "package_name": "com.aditya.tugasakhir"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "7786640763-al0p0sqce8ahivls2a2ta16c2fs9m87a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZ9csL9RkDUnJPjhAq9Ohu8mMiqqmR4Io"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "7786640763-al0p0sqce8ahivls2a2ta16c2fs9m87a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

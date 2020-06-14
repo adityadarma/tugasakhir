@@ -1,8 +1,8 @@
-import 'dart:convert';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:iot/login.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -10,21 +10,24 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  var _pantauan;
+  var recentJobsRef =  FirebaseDatabase.instance.reference();
+  void doLogout() async {
+    Fluttertoast.showToast(
+      msg: "Logout Success!",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIos: 3,
+      backgroundColor: Colors.grey[400],
+      textColor: Colors.white,
+      fontSize: 16.0
+    );
 
-  Future<void> fetchData() async {
-    final prefs = await SharedPreferences.getInstance();
-    var token = "Bearer " + prefs.getString('token');
-    var result = await http.get(Uri.encodeFull('http://restapi-ta.kubusoftware.com/pantauan'), headers: { 'accept':'application/json', 'Authorization':token});
-    setState(() {
-      _pantauan = json.decode(result.body);
-    });
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login()));
   }
 
   @override
-  void initState() {
-    super.initState();
-    fetchData();
+  void dispose() {
+    super.dispose();
   }
 
   Material cardItems(String title, String priceVal,String subtitle) {
@@ -69,52 +72,67 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
-  }
-
-  Widget _buildData() {
-    return _pantauan != null
-        ? RefreshIndicator(
-            child: Container(
-                // color:Color(0xffE5E5E5),
-                child:StaggeredGridView.count(
-                  crossAxisCount: 4,
-                  crossAxisSpacing: 12.0,
-                  mainAxisSpacing: 12.0,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: cardItems("Tegangan",_pantauan['tegangan'],"Volt"),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: cardItems("Arus",_pantauan['arus'],"Ampere"),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: cardItems("Daya",_pantauan['daya'],"Watt"),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: cardItems("Power Factor",_pantauan['pf'],""),
-                    ),
-                  ],
-                  staggeredTiles: [
-                    StaggeredTile.extent(2, 200.0),
-                    StaggeredTile.extent(2, 200.0),
-                    StaggeredTile.extent(2, 200.0),
-                    StaggeredTile.extent(2, 200.0),
-                  ],
-                )
-              ),
-            onRefresh: fetchData,
-          )
-        : Center(child: CircularProgressIndicator());
-  }
-
+  } 
+  
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: _buildData()
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.red,
+        title: Text("Watt Meter"),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.power_settings_new, size: 25.0,),
+            onPressed: (){
+              doLogout();
+            },
+          )
+        ],
+      ),
+      body: Container(
+        color: Color(0xffE5E5E5),
+        child: StreamBuilder(
+          stream: recentJobsRef.onValue,
+          builder: (context, AsyncSnapshot<Event> snap){
+            if(snap.hasData){
+              Map<dynamic, dynamic> data = snap.data.snapshot.value;
+              return StaggeredGridView.count(
+                padding: EdgeInsets.only(top: 20.0),
+                crossAxisCount: 4,
+                crossAxisSpacing: 12.0,
+                mainAxisSpacing: 12.0,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: cardItems("Tegangan",data['tegangan'].toString(),"Volt"),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: cardItems("Arus",data['arus'].toString(),"Ampere"),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: cardItems("Power Factor",data['faktor_daya'].toString(),""),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: cardItems("Daya",data['daya'].toString(),"Watt"),
+                  ),
+                ],
+                staggeredTiles: [
+                  StaggeredTile.extent(2, 200.0),
+                  StaggeredTile.extent(2, 200.0),
+                  StaggeredTile.extent(2, 200.0),
+                  StaggeredTile.extent(2, 200.0),
+                ],
+              );
+            }
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        ),
+      ),
     );
-  }  
+  }
 }

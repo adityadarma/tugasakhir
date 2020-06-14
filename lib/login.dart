@@ -1,10 +1,7 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:iot/mainpage.dart';
+import 'package:iot/home.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:iot/signup.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -17,7 +14,6 @@ class _LoginState extends State<Login> {
   final email = TextEditingController();
   final password = TextEditingController();
   bool isLoading = false;
-  bool failed = true; 
 
   Future<void> doLogin() async {
     try{
@@ -25,58 +21,41 @@ class _LoginState extends State<Login> {
         isLoading = true;
       });
 
-      final prefs = await SharedPreferences.getInstance();
-      await http.post(
-        Uri.encodeFull('http://restapi-ta.kubusoftware.com/login'),
-        body: {'email': email.text, 'password': password.text},
-        headers: {"Accept": "application/json"}
-      ).then((response) async {
-        var data = json.decode(response.body);
-        if(response.statusCode == 200){
-          prefs.setBool('login', true);
-          prefs.setString('token', data['token']);
-          prefs.setString('email', data['email']);
-          Fluttertoast.showToast(
-            msg: data['message'],
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIos: 3,
-            backgroundColor: Colors.grey[400],
-            textColor: Colors.white,
-            fontSize: 16.0
-          );
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainPage()));
-        }else if(response.statusCode == 422){
-          Fluttertoast.showToast(
-            msg: 'Data diperlukan',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIos: 3,
-            backgroundColor: Colors.red[400],
-            textColor: Colors.white,
-            fontSize: 16.0
-          );
-        }else{
-          Fluttertoast.showToast(
-            msg: data['message'],
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIos: 3,
-            backgroundColor: Colors.red[400],
-            textColor: Colors.white,
-            fontSize: 16.0
-          );
-        }
-        setState(() {
-          isLoading = false;
-        }); 
-      });
+      AuthResult result = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email.text, password: password.text);
+      FirebaseUser user = result.user;
+      print(user.uid);
     }catch(e){
       setState(() {
         isLoading = false;
       }); 
       print(e.message);
     }
+
+    FirebaseAuth.instance
+    .currentUser()
+    .then((currentUser) => {
+      if (currentUser == null)
+      {
+          setState(() {
+            isLoading = false;
+          }),
+          Fluttertoast.showToast(
+            msg: "Email or Password is wrong!!",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIos: 3,
+            backgroundColor: Colors.grey[400],
+            textColor: Colors.white,
+            fontSize: 16.0
+          ),
+          password.clear()
+      }else{
+          setState(() {
+            isLoading = false;
+          }),
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Home()))
+      }
+    });
   }
 
   @override
@@ -169,32 +148,6 @@ class _LoginState extends State<Login> {
                         ),
                       ),
               ),
-              // Padding(
-              //   padding: EdgeInsets.symmetric(vertical: 10.0),
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.center,
-              //     children: <Widget>[
-              //       Text(
-              //         'Belum punya akun?',
-              //         style: TextStyle(fontFamily: 'Montserrat'),
-              //       ),
-              //       SizedBox(width: 5.0),
-              //       InkWell(
-              //         onTap: () {
-              //           Navigator.push(context, MaterialPageRoute(builder: (context) => Signup()));
-              //         },
-              //         child: Text(
-              //           'Daftar',
-              //           style: TextStyle(
-              //               color: Colors.white,
-              //               fontFamily: 'Montserrat',
-              //               fontWeight: FontWeight.bold,
-              //               decoration: TextDecoration.underline),
-              //         ),
-              //       )
-              //     ],
-              //   )
-              // ),
             ],
           ),
         ),

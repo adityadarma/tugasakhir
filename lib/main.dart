@@ -1,8 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:iot/home.dart';
 import 'dart:async';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:iot/login.dart';
-import 'package:iot/mainpage.dart';
 
 void main() => runApp(MyApp());
 
@@ -33,21 +33,27 @@ class _SplashscreenState extends State<Splashscreen> {
   startSplashScreen() async {
     var duration = const Duration(seconds: 3);
     return Timer(duration, () async {
-      final prefs = await SharedPreferences.getInstance();
-      bool loginStatus = prefs.getBool('login') ?? false;
-      if (loginStatus) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) {
-            return MainPage();
-          }),
-        );
-      } else {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) {
-            return Login();
-          }),
-        );
-      }
+      FirebaseAuth.instance
+      .currentUser()
+      .then((currentUser) => {
+            if (currentUser == null)
+              {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (_) {
+                    return Login();
+                  }),
+                )
+              }
+            else
+              {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (_) {
+                    return Home();
+                  }),
+                )
+              }
+          })
+      .catchError((err) => print(err));
     });
   }
 
