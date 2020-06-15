@@ -8,7 +8,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="Energi Meter"
+        android:label="Watt Meter"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

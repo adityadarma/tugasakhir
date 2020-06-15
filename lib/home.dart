@@ -21,7 +21,6 @@ class _HomeState extends State<Home> {
       textColor: Colors.white,
       fontSize: 16.0
     );
-
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login()));
   }
 
@@ -82,7 +81,7 @@ class _HomeState extends State<Home> {
         title: Text("Watt Meter"),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.power_settings_new, size: 25.0,),
+            icon: Icon(Icons.exit_to_app, size: 25.0,),
             onPressed: (){
               doLogout();
             },
