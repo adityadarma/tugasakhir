@@ -10,7 +10,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  var recentJobsRef =  FirebaseDatabase.instance.reference();
   void doLogout() async {
     Fluttertoast.showToast(
       msg: "Logout Success!",
@@ -91,7 +90,7 @@ class _HomeState extends State<Home> {
       body: Container(
         color: Color(0xffE5E5E5),
         child: StreamBuilder(
-          stream: recentJobsRef.onValue,
+          stream: FirebaseDatabase.instance.reference().onValue,
           builder: (context, AsyncSnapshot<Event> snap){
             if(snap.hasData){
               Map<dynamic, dynamic> data = snap.data.snapshot.value;
