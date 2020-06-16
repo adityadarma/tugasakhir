@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -11,16 +12,19 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   void doLogout() async {
-    Fluttertoast.showToast(
-      msg: "Logout Success!",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      timeInSecForIos: 3,
-      backgroundColor: Colors.grey[400],
-      textColor: Colors.white,
-      fontSize: 16.0
-    );
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login()));
+    FirebaseAuth.instance.signOut()
+    .then((e){
+      Fluttertoast.showToast(
+        msg: "Logout Success!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIos: 3,
+        backgroundColor: Colors.grey[400],
+        textColor: Colors.white,
+        fontSize: 16.0
+      );
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login()));
+    });    
   }
 
   @override
